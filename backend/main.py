@@ -10,6 +10,8 @@ from utils import list_path
 
 app = FastAPI(root_path=RouterConf.prefix)
 
+for middleware in AppConf.middlewares:
+    app.add_middleware(middleware["middleware"], **middleware["args"])
 
 @app.post("/token")
 async def token(formdata: Annotated[OAuth2PasswordRequestForm, Depends()]):
@@ -29,8 +31,10 @@ async def get_path(user: Annotated[UserModel, Depends(user_dep)], path: str = ""
     userpath = user.path
     if not userpath:
         userpath = user.name
-    path = os.path.join(PathConf.base, userpath, path)
-    return list_path(path)
+    base_path = os.path.join(PathConf.base, userpath)
+    real_path = os.path.join(base_path, path)
+    resp = map(lambda x:{**x, "path":x["path"][len(base_path):]}, list_path(real_path)) 
+    return list(resp)
 
 
 if __name__ == '__main__':
