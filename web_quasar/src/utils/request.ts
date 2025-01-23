@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { APIURL } from '@/config'
 import { storage } from "@/stores/storage"
-import router from '@/router'
+//import router from '@/router'
 
 
 const DEBUG = process.env.NODE_ENV === "development";
