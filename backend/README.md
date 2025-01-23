@@ -1,5 +1,11 @@
 
 ```
+## create log directory
 mkdir ./log/
-fastapi dev app.py
+
+## Develop env
+fastapi dev main.py
+
+## Production env
+python main.py
 ```
