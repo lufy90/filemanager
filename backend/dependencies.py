@@ -7,8 +7,14 @@ from fastapi import Depends, HTTPException
 
 
 async def user_dep(token: Annotated[str, Depends(AuthConf.schema)]):
-    data = decode_token(token)
-    name = data.get("name")
+    try:
+        data = decode_token(token)
+        name = data.get("name")
+    except Exception as e:
+        raise HTTPException(
+            status_code=401,
+            detail=str(e)
+        )
     if name and get_user(name):
         return UserModel(name=name)
     else:
