@@ -22,20 +22,46 @@
         />
       </div>
       <ul>
-        <file-tree :root="item"></file-tree>
+        <file-tree :root="item" @select="handleChange"></file-tree>
       </ul>
     </q-drawer>
+    <div class="main">
+      <ContentView :data="currentItem" />
+    </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import FileTree from '../components/FileTree.vue'
-const item = ref({
+import type { FileTreeItem } from '../components/models'
+import ContentView from '../components/ContentView.vue'
+
+const item = ref<FileTreeItem>({
   name: '/',
   path: '',
   is_dir: true,
+  children: [],
 })
+
+const currentItem = ref<FileTreeItem>({
+  name: '/',
+  path: '',
+  is_dir: true,
+  children: [],
+})
+
+const handleChange = (selected: FileTreeItem) => {
+  console.log('selected:', selected)
+  currentItem.value = selected
+}
 
 const openDrawer = ref(true)
 </script>
+<style lang="css">
+.main {
+  width: calc(100% - 200px);
+  height: 100%;
+  overflow: auto;
+}
+</style>
